@@ -1,2 +1,2 @@
 # Gov IT HUB
-## Radar puppet environment
+## Management puppet environment

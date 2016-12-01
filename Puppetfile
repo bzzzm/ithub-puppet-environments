@@ -1,4 +1,5 @@
 # Internal modules
+mod 'base',                     :git => 'https://github.com/bzzzm/ithub-puppet-govithub-base'
 
 # External modules
 mod 'puppet-collectd',          :git => 'https://github.com/voxpupuli/puppet-collectd'
@@ -13,3 +14,4 @@ mod 'yelp-uchiwa'
 mod 'sensu-sensu', '2.1.0'
 mod 'puppetlabs-vcsrepo'
 mod 'puppetlabs-git'
+mod 'luxflux-openvpn', '4.0.1'
