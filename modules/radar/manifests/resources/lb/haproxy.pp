@@ -6,7 +6,7 @@ class radar::resources::lb::haproxy (
       'log'     => "${::ipaddress} local0",
       'chroot'  => '/var/lib/haproxy',
       'pidfile' => '/var/run/haproxy.pid',
-      'maxconn' => '4000',
+      'maxconn' => '32000',
       'user'    => 'haproxy',
       'group'   => 'haproxy',
       'daemon'  => '',
@@ -43,19 +43,45 @@ class radar::resources::lb::haproxy (
         'set-header X-Client-IP %[src]',
       ],
       'balance' => 'roundrobin',
+      'acl' => [
+         'github_notification path_beg /githook',
+         'github_subnet src 192.30.252.0/22',
+       ],
+       'use_backend' => 'radar_mgmt_backend if github_subnet github_notification',
+       'default_backend' => 'radar_web_backend',
     },
   }
 
-  haproxy::balancermember { 'haproxy':
-    listening_service => 'radarweb',
+  haproxy::backend { 'radar_web_backend':
+    mode => 'http',
+  }
+
+  haproxy::backend { 'radar_mgmt_backend':    
+    mode => 'http',
+  }
+
+  haproxy::balancermember { 'radar_web_nginx':
+    listening_service => 'radar_web_backend',
     ports             => '80',
     server_names      => [
       'radar-web01',
-      'radar-web02'
+      'radar-web02',
     ],
     ipaddresses       => [
       '192.168.11.14',
-      '192.168.11.15'
+      '192.168.11.15',
+    ],
+    options           => 'check',
+  }
+
+  haproxy::balancermember { 'radar_mgmt_githook':
+    listening_service => 'radar_mgmt_backend',
+    ports             => '8001',
+    server_names      => [
+      'radar-mgmt' ,
+    ],
+    ipaddresses       => [
+      '192.168.11.11',
     ],
     options           => 'check',
   }

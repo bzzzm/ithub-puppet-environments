@@ -1,7 +1,14 @@
 class radar::resources::web::nginx (
 ) inherits radar::params {
 
-  class { 'nginx': }
+  class { 'nginx':
+    worker_processes     => $::processors.count,
+    # turn off Gzip so sendfile is used, HAProxy sends Gzip content to client anyway
+    gzip                 => 'off',
+    worker_rlimit_nofile => 65535,
+    worker_connections   => 8192,
+    server_tokens        => 'off',
+  }
 
   $vhosts = [ 
     'radar.ithub.gov.ro',
