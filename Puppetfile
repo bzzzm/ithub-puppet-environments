@@ -21,3 +21,4 @@ mod 'puppet-postgresql_replication',
 mod 'stahnma-epel', '1.2.2'
 mod 'puppet-nodejs', '2.2.0'
 mod 'arioch-redis', '1.2.4'
+mod 'puppet-nginx', '0.5.0'
