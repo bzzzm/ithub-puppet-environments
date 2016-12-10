@@ -30,4 +30,13 @@ class radar::resources::web::nginx (
     }
   }
 
+  file { '/etc/nginx/conf.d/realip.conf':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template('radar/resources/nginx/realip.conf.erb'),
+    notify  => Service['nginx'],
+    require => Package['nginx'],
+  }
 }

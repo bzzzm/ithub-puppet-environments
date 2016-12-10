@@ -34,10 +34,13 @@ class radar::resources::lb::haproxy (
   haproxy::listen { 'radarweb':
     ipaddress => $::ipaddress,
     ports     => '80',
-    mode      => 'tcp',
+    mode      => 'http',
     options   => {
       'option'  => [
         'tcplog',
+      ],
+      'http-request' => [
+        'set-header X-Client-IP %[src]',
       ],
       'balance' => 'roundrobin',
     },
